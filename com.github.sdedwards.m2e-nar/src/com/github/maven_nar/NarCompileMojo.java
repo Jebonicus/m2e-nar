@@ -50,6 +50,14 @@ public class NarCompileMojo extends AbstractCompileMojo
      */
     protected MavenSession session;
 
+	/**
+     * Specify that the final manifest should be embedded in the output (default
+     * true) or false for side by side.
+	 * 
+	 * @parameter property="nar.embedManifest" default-value="true"
+	 */
+    protected boolean embedManifest = true;
+
 	protected List<Artifact> getArtifacts() {
 		final Set<Artifact> artifacts = getMavenProject().getArtifacts();
 		List<Artifact> returnArtifact = new ArrayList<Artifact>();

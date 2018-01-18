@@ -101,7 +101,7 @@ public class NarLayout30 extends AbstractNarLayout {
 	}
 
 	public File getNoArchDirectory(File baseDir, NarArtifact artifact) {
-		if (artifact.getTargetDirectory() != null) {
+		if (artifact.getTargetDirectory() != null && artifact.getTargetDirectory().exists()) {
 			// Compile only build so directly use the directory in the sibling
 			// module
 			return new File(artifact.getTargetDirectory(), artifact.getArtifactId() + "-" + artifact.getBaseVersion() + "-" + NarConstants.NAR_NO_ARCH);
@@ -117,7 +117,7 @@ public class NarLayout30 extends AbstractNarLayout {
 	}
 
 	private File getAolDirectory(File baseDir, NarArtifact artifact, String aol, String type) {
-		if (artifact.getTargetDirectory() != null) {
+		if (artifact.getTargetDirectory() != null && artifact.getTargetDirectory().exists()) {
 			// Compile only build so directly use the directory in the sibling
 			// module
 			return new File(artifact.getTargetDirectory(), artifact.getArtifactId() + "-" + artifact.getBaseVersion() + "-" + aol + "-" + type);

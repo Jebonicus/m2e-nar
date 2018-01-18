@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -38,6 +37,8 @@ import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -84,6 +85,56 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 	 * @since 2.2
 	 */
 	// private List remotePluginRepositories;
+
+	  /**
+	   * Comma separated list of Artifact names to exclude.
+	   * @Parameter(property = "excludeArtifactIds", defaultValue = "")
+	   * @since 2.0
+	   */
+	  
+	  protected String excludeArtifactIds;
+
+	  /**
+	   * Comma separated list of Artifact names to include.
+	   * @Parameter(property = "includeArtifactIds", defaultValue = "") 
+	   * @since 2.0
+	   */
+	  
+	  protected String includeArtifactIds;
+
+	  /**
+	   * Comma separated list of GroupId Names to exclude.
+	   * @Parameter(property = "excludeGroupIds", defaultValue = "") 
+	   * @since 2.0
+	   */
+	  
+	  protected String excludeGroupIds;
+
+	  /**
+	   * Comma separated list of GroupIds to include.
+	   * @Parameter(property = "includeGroupIds", defaultValue = "") 
+	   * @since 2.0
+	   */
+	  
+	  protected String includeGroupIds;
+	  
+	  /**
+	   * The Session object for controling/configuring the verbose dependency graph collection request.
+	   * @since 3.5.2
+	   * @Parameter(defaultValue = "${repositorySystemSession}")
+	   */
+	  
+	  private RepositorySystemSession repoSession;
+
+	  /**
+	   * The List of repositories queried by the verbose dependency graph collection request.
+	   * @since 3.5.2
+	   * @Parameter(defaultValue = "${project.remoteProjectRepositories}")
+	   */  
+	  
+	  private List<RemoteRepository> projectRepos;
+	  
+
 
 	protected List<NarArtifact> narDependencies = null;
 
@@ -211,7 +262,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
 	public File getArtifactDirectory(NarArtifact dependency, File unpackDirectory) {
 		File targetDirectory = dependency.getNarInfo().getTargetDirectory();
-		if (targetDirectory != null) {
+		if (targetDirectory != null && targetDirectory.exists()) {
 			return targetDirectory;
 		} else {
 			return unpackDirectory;
